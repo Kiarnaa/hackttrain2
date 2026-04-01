@@ -18,6 +18,7 @@ const palette = {
 export default function LandingPage() {
   const [basketCount, setBasketCount] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showStory, setShowStory] = useState(false);
   const [heroVisible, setHeroVisible] = useState(false);
   const heroRef = useRef(null);
 
@@ -115,7 +116,7 @@ export default function LandingPage() {
             <button style={styles.btnPrimary}>
               Découvrir la Collection
             </button>
-            <a href="#" style={styles.btnGhost}>
+            <a href="/about" style={styles.btnGhost}>
               Notre Histoire →
             </a>
           </div>
@@ -807,5 +808,64 @@ const styles = {
     letterSpacing: "0.04em",
     borderBottom: `1px solid ${palette.maroon}`,
     paddingBottom: 2,
+  },
+
+  // Modal styles
+  modalOverlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: "rgba(0,0,0,0.5)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1000,
+  },
+  modalContent: {
+    background: palette.white,
+    borderRadius: 20,
+    padding: 40,
+    maxWidth: 600,
+    maxHeight: "80vh",
+    overflowY: "auto",
+    position: "relative",
+    boxShadow: "0 24px 64px rgba(107,30,42,0.2)",
+  },
+  modalClose: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+    background: "none",
+    border: "none",
+    fontSize: 24,
+    cursor: "pointer",
+    color: palette.textMuted,
+  },
+  modalTitle: {
+    fontFamily: "'Cormorant Garamond', serif",
+    fontSize: 28,
+    fontWeight: 600,
+    color: palette.maroon,
+    marginBottom: 8,
+  },
+  modalSubtitle: {
+    fontSize: 16,
+    fontStyle: "italic",
+    color: palette.textMuted,
+    marginBottom: 24,
+  },
+  modalText: {
+    lineHeight: 1.6,
+    color: palette.text,
+  },
+  modalHeading: {
+    fontFamily: "'Cormorant Garamond', serif",
+    fontSize: 20,
+    fontWeight: 600,
+    color: palette.maroon,
+    marginTop: 24,
+    marginBottom: 12,
   },
 };
