@@ -212,7 +212,7 @@ export default function LandingPage() {
           </div>
         </div>
         <div style={styles.footerBottom}>
-          <span>© 2026 Maren. Tous droits réservés.</span>
+          <span>© 2026 ETHKL. Tous droits réservés.</span>
           <span>Fait avec intention.</span>
         </div>
       </footer>
