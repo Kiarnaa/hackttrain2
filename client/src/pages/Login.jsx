@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
+import LandingHeader from "../components/LandingHeader";
 
 const Login = () => {
   const { login } = useAuth();
@@ -28,119 +29,222 @@ const Login = () => {
   };
 
   return (
-    <motion.div
-      className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 bg-white bg-[radial-gradient(circle_at_1px_1px,rgba(139,69,19,0.1)_1px,transparent_0)] bg-[length:20px_20px]"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-    >
+    <div style={styles.page}>
+      <LandingHeader />
       <motion.div
-        className="bg-stone-100 shadow-xl rounded-lg p-8 w-full max-w-md min-h-[500px] border border-stone-200 flex flex-col justify-center"
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+        style={styles.body}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
       >
-        <motion.h2
-          className="text-2xl font-bold text-stone-800 mb-6 text-center"
-          initial={{ scale: 0.9 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.4, delay: 0.4 }}
+        <motion.div
+          style={styles.card}
+          initial={{ y: 24, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
         >
-          Content de vous revoir
-        </motion.h2>
-        <div className="w-16 h-1 bg-amber-700 mx-auto mb-6 rounded-full"></div>
-
-        {error && (
-          <motion.div
-            className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 mb-4 text-sm"
+          <motion.p
+            style={styles.eyebrow}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
+            transition={{ delay: 0.3 }}
           >
-            {error}
-          </motion.div>
-        )}
+            Bienvenue
+          </motion.p>
+          <motion.h2
+            style={styles.title}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+          >
+            Connexion
+          </motion.h2>
 
-        <motion.form
-          onSubmit={handleSubmit}
-          className="space-y-4"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.1,
-              },
-            },
-          }}
-        >
-          <motion.div
+          {error && (
+            <motion.div
+              style={styles.errorBox}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              {error}
+            </motion.div>
+          )}
+
+          <motion.form
+            onSubmit={handleSubmit}
+            style={styles.form}
+            initial="hidden"
+            animate="visible"
             variants={{
-              hidden: { x: -20, opacity: 0 },
-              visible: { x: 0, opacity: 1 },
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.4 } },
             }}
           >
-            <label className="block text-sm font-medium text-stone-700 mb-1">
-              E-mail
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400 bg-stone-50 text-stone-800 placeholder-stone-400"
-              placeholder="vous@exemple.com"
-              required
-            />
-          </motion.div>
-          <motion.div
-            variants={{
-              hidden: { x: -20, opacity: 0 },
-              visible: { x: 0, opacity: 1 },
-            }}
-          >
-            <label className="block text-sm font-medium text-stone-700 mb-1">
-              Mot de passe
-            </label>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400 bg-stone-50 text-stone-800 placeholder-stone-400"
-              placeholder="••••••••"
-              required
-            />
-          </motion.div>
+            <motion.div
+              style={styles.field}
+              variants={{ hidden: { x: -16, opacity: 0 }, visible: { x: 0, opacity: 1 } }}
+            >
+              <label style={styles.label}>Adresse e-mail</label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                style={styles.input}
+                placeholder="vous@exemple.com"
+                required
+              />
+            </motion.div>
+            <motion.div
+              style={styles.field}
+              variants={{ hidden: { x: -16, opacity: 0 }, visible: { x: 0, opacity: 1 } }}
+            >
+              <label style={styles.label}>Mot de passe</label>
+              <input
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                style={styles.input}
+                placeholder="••••••••"
+                required
+              />
+            </motion.div>
 
-          <motion.button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2.5 mt-2 bg-amber-700 text-white rounded-md font-medium hover:bg-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ duration: 0.2 }}
-          >
-            {loading ? "Connexion en cours..." : "Se connecter"}
-          </motion.button>
-        </motion.form>
+            <motion.button
+              type="submit"
+              disabled={loading}
+              style={{ ...styles.btn, opacity: loading ? 0.7 : 1 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              {loading ? "Connexion en cours..." : "Se connecter"}
+            </motion.button>
+          </motion.form>
 
-        <motion.p
-          className="text-center text-sm text-stone-500 mt-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-        >
-          Vous n'avez pas de compte ?{" "}
-          <Link to="/register" className="text-amber-600 font-medium hover:underline">
-            S'inscrire
-          </Link>
-        </motion.p>
+          <p style={styles.footer}>
+            Pas encore de compte ?{" "}
+            <Link to="/register" style={styles.link}>S'inscrire</Link>
+          </p>
+        </motion.div>
       </motion.div>
-    </motion.div>
+    </div>
   );
+};
+
+const palette = {
+  white: "#FAFAF8",
+  beige: "#E8E0D0",
+  beigeLight: "#F2EDE4",
+  beigeDark: "#D4C8B4",
+  maroon: "#6B1E2A",
+  text: "#1A1410",
+  textMuted: "#7A6E64",
+};
+
+const styles = {
+  page: {
+    minHeight: "100vh",
+    background: palette.white,
+    fontFamily: "'DM Sans', sans-serif",
+    color: palette.text,
+  },
+  body: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "64px 16px",
+    minHeight: "calc(100vh - 102px)",
+  },
+  card: {
+    background: palette.white,
+    border: `1px solid ${palette.beige}`,
+    borderRadius: 20,
+    padding: "48px 40px",
+    width: "100%",
+    maxWidth: 420,
+    boxShadow: "0 24px 64px rgba(107,30,42,0.07)",
+  },
+  eyebrow: {
+    fontSize: 11,
+    letterSpacing: "0.18em",
+    textTransform: "uppercase",
+    color: palette.maroon,
+    marginBottom: 10,
+    fontWeight: 500,
+  },
+  title: {
+    fontFamily: "'Cormorant Garamond', serif",
+    fontSize: 36,
+    fontWeight: 400,
+    marginBottom: 32,
+    color: palette.text,
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 20,
+  },
+  field: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 6,
+  },
+  label: {
+    fontSize: 12,
+    letterSpacing: "0.06em",
+    textTransform: "uppercase",
+    color: palette.textMuted,
+    fontWeight: 500,
+  },
+  input: {
+    border: `1px solid ${palette.beigeDark}`,
+    background: palette.beigeLight,
+    padding: "12px 16px",
+    borderRadius: 8,
+    fontSize: 14,
+    outline: "none",
+    fontFamily: "'DM Sans', sans-serif",
+    color: palette.text,
+    width: "100%",
+  },
+  btn: {
+    background: palette.maroon,
+    color: "#fff",
+    border: "none",
+    borderRadius: 8,
+    padding: "14px 0",
+    fontSize: 12,
+    letterSpacing: "0.1em",
+    textTransform: "uppercase",
+    cursor: "pointer",
+    fontFamily: "'DM Sans', sans-serif",
+    fontWeight: 500,
+    marginTop: 8,
+    transition: "background 0.2s ease",
+  },
+  errorBox: {
+    background: "#fdf0f0",
+    border: "1px solid #e8c8c8",
+    color: "#8b2020",
+    borderRadius: 8,
+    padding: "12px 16px",
+    fontSize: 13,
+    marginBottom: 20,
+  },
+  footer: {
+    textAlign: "center",
+    fontSize: 13,
+    color: palette.textMuted,
+    marginTop: 24,
+  },
+  link: {
+    color: palette.maroon,
+    textDecoration: "none",
+    fontWeight: 500,
+    borderBottom: `1px solid ${palette.maroon}`,
+    paddingBottom: 1,
+  },
 };
 
 export default Login;
