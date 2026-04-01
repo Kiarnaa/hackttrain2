@@ -13,6 +13,7 @@ const paymentDbRoutes = require('./paymentDb');
 const commandeRoutes = require('./commande');
 const livraisonRoutes = require('./livraison');
 const cartRoutes = require('./cart');
+const webhookRoutes = require('./webhooks');
 
 // Intégrer les routes
 app.use('/api/auth', authRoutes);
@@ -22,6 +23,7 @@ app.use('/api/payments-db', paymentDbRoutes);
 app.use('/api/commandes', commandeRoutes);
 app.use('/api/livraisons', livraisonRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/webhooks', webhookRoutes);
 
 // Route de base
 app.get('/', (req, res) => {
