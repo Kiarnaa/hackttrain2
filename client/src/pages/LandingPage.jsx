@@ -176,7 +176,7 @@ export default function LandingPage() {
           <p style={styles.editorialQuote}>
             "Nous croyons que les objets que vous possédez doivent sembler être des choix — pas des accumulations."
           </p>
-          <span style={styles.editorialAuthor}>— Maren, Fondatrice</span>
+          <span style={styles.editorialAuthor}>— Maharavo, Fondateur</span>
         </div>
       </section>
 
