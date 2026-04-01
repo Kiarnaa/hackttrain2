@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS users (
   id_users SERIAL PRIMARY KEY,
+  email VARCHAR(255) NOT NULL UNIQUE,
   username VARCHAR(255) NOT NULL,
   age INT CHECK (age >= 18),
-  email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL
 );
 
@@ -20,12 +20,6 @@ CREATE TABLE IF NOT EXISTS wishlists (
   id_products INTEGER REFERENCES products(id_products) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS command (
-  id_command SERIAL PRIMARY KEY,
-  id_users INTEGER REFERENCES users(id_users) ON DELETE CASCADE,
-  id_products INTEGER REFERENCES products(id_products) ON DELETE CASCADE,
-  quantity INTEGER NOT NULL
-);
 
 CREATE TABLE IF NOT EXISTS admin (
   id_admin SERIAL PRIMARY KEY,
@@ -52,5 +46,14 @@ CREATE TABLE payment (
   id_command INTEGER REFERENCES command(id_command) ON DELETE CASCADE,
   amount NUMERIC(10, 2) NOT NULL,
   payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS cart (
+  id_cart SERIAL PRIMARY KEY,
+  id_users INTEGER REFERENCES users(id_users) ON DELETE CASCADE,
+  id_products INTEGER REFERENCES products(id_products) ON DELETE CASCADE,
+  quantity INTEGER NOT NULL CHECK (quantity > 0),
+  added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(id_users, id_products)
 );
 
