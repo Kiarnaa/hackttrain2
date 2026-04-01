@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import LandingHeader from "../components/LandingHeader";
 
 const Register = () => {
   const { register } = useAuth();
@@ -30,80 +31,187 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
-      <div className="card w-full max-w-md">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-          Create an account
-        </h2>
+    <div style={styles.page}>
+      <LandingHeader />
+      <div style={styles.body}>
+        <div style={styles.card}>
+          <p style={styles.eyebrow}>Rejoignez-nous</p>
+          <h2 style={styles.title}>Créer un compte</h2>
 
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 mb-4 text-sm">
-            {error}
-          </div>
-        )}
+          {error && (
+            <div style={styles.errorBox}>{error}</div>
+          )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              className="input-field"
-              placeholder="John Doe"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              className="input-field"
-              placeholder="you@example.com"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              className="input-field"
-              placeholder="Min. 6 characters"
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit} style={styles.form}>
+            <div style={styles.field}>
+              <label style={styles.label}>Nom complet</label>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                style={styles.input}
+                placeholder="Jean Dupont"
+                required
+              />
+            </div>
+            <div style={styles.field}>
+              <label style={styles.label}>Adresse e-mail</label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                style={styles.input}
+                placeholder="vous@exemple.com"
+                required
+              />
+            </div>
+            <div style={styles.field}>
+              <label style={styles.label}>Mot de passe</label>
+              <input
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                style={styles.input}
+                placeholder="Min. 6 caractères"
+                required
+              />
+            </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn-primary w-full py-2.5 mt-2"
-          >
-            {loading ? "Creating account..." : "Create Account"}
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={loading}
+              style={{ ...styles.btn, opacity: loading ? 0.7 : 1 }}
+            >
+              {loading ? "Création en cours..." : "Créer mon compte"}
+            </button>
+          </form>
 
-        <p className="text-center text-sm text-gray-500 mt-4">
-          Already have an account?{" "}
-          <Link to="/login" className="text-primary-600 font-medium hover:underline">
-            Sign in
-          </Link>
-        </p>
+          <p style={styles.footer}>
+            Déjà un compte ?{" "}
+            <Link to="/login" style={styles.link}>Se connecter</Link>
+          </p>
+        </div>
       </div>
     </div>
   );
+};
+
+const palette = {
+  white: "#FAFAF8",
+  beige: "#E8E0D0",
+  beigeLight: "#F2EDE4",
+  beigeDark: "#D4C8B4",
+  maroon: "#6B1E2A",
+  text: "#1A1410",
+  textMuted: "#7A6E64",
+};
+
+const styles = {
+  page: {
+    minHeight: "100vh",
+    background: palette.white,
+    fontFamily: "'DM Sans', sans-serif",
+    color: palette.text,
+  },
+  body: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "64px 16px",
+    minHeight: "calc(100vh - 102px)",
+  },
+  card: {
+    background: palette.white,
+    border: `1px solid ${palette.beige}`,
+    borderRadius: 20,
+    padding: "48px 40px",
+    width: "100%",
+    maxWidth: 420,
+    boxShadow: "0 24px 64px rgba(107,30,42,0.07)",
+  },
+  eyebrow: {
+    fontSize: 11,
+    letterSpacing: "0.18em",
+    textTransform: "uppercase",
+    color: palette.maroon,
+    marginBottom: 10,
+    fontWeight: 500,
+  },
+  title: {
+    fontFamily: "'Cormorant Garamond', serif",
+    fontSize: 36,
+    fontWeight: 400,
+    marginBottom: 32,
+    color: palette.text,
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 20,
+  },
+  field: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 6,
+  },
+  label: {
+    fontSize: 12,
+    letterSpacing: "0.06em",
+    textTransform: "uppercase",
+    color: palette.textMuted,
+    fontWeight: 500,
+  },
+  input: {
+    border: `1px solid ${palette.beigeDark}`,
+    background: palette.beigeLight,
+    padding: "12px 16px",
+    borderRadius: 8,
+    fontSize: 14,
+    outline: "none",
+    fontFamily: "'DM Sans', sans-serif",
+    color: palette.text,
+    width: "100%",
+  },
+  btn: {
+    background: palette.maroon,
+    color: "#fff",
+    border: "none",
+    borderRadius: 8,
+    padding: "14px 0",
+    fontSize: 12,
+    letterSpacing: "0.1em",
+    textTransform: "uppercase",
+    cursor: "pointer",
+    fontFamily: "'DM Sans', sans-serif",
+    fontWeight: 500,
+    marginTop: 8,
+    transition: "background 0.2s ease",
+  },
+  errorBox: {
+    background: "#fdf0f0",
+    border: "1px solid #e8c8c8",
+    color: "#8b2020",
+    borderRadius: 8,
+    padding: "12px 16px",
+    fontSize: 13,
+    marginBottom: 20,
+  },
+  footer: {
+    textAlign: "center",
+    fontSize: 13,
+    color: palette.textMuted,
+    marginTop: 24,
+  },
+  link: {
+    color: palette.maroon,
+    textDecoration: "none",
+    fontWeight: 500,
+    borderBottom: `1px solid ${palette.maroon}`,
+    paddingBottom: 1,
+  },
 };
 
 export default Register;
