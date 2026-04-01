@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS users (
   id_users SERIAL PRIMARY KEY,
+  email VARCHAR(255) NOT NULL UNIQUE,
   username VARCHAR(255) NOT NULL,
   age INT CHECK (age >= 18),
-  email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL
 );
 
@@ -20,12 +20,6 @@ CREATE TABLE IF NOT EXISTS wishlists (
   id_products INTEGER REFERENCES products(id_products) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS command (
-  id_command SERIAL PRIMARY KEY,
-  id_users INTEGER REFERENCES users(id_users) ON DELETE CASCADE,
-  id_products INTEGER REFERENCES products(id_products) ON DELETE CASCADE,
-  quantity INTEGER NOT NULL
-);
 
 CREATE TABLE IF NOT EXISTS admin (
   id_admin SERIAL PRIMARY KEY,
@@ -53,4 +47,32 @@ CREATE TABLE payment (
   amount NUMERIC(10, 2) NOT NULL,
   payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS cart (
+  id_cart SERIAL PRIMARY KEY,
+  id_users INTEGER REFERENCES users(id_users) ON DELETE CASCADE,
+  id_products INTEGER REFERENCES products(id_products) ON DELETE CASCADE,
+  quantity INTEGER NOT NULL CHECK (quantity > 0),
+  added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(id_users, id_products)
+);
+
+CREATE TABLE IF NOT EXISTS payment_webhooks (
+  id_webhook SERIAL PRIMARY KEY,
+  webhook_id VARCHAR(255) UNIQUE,
+  id_payment INTEGER REFERENCES payment(id_payment),
+  id_command INTEGER REFERENCES command(id_command),
+  status TEXT NOT NULL DEFAULT 'pending',
+  payload JSONB,
+  retry_count INTEGER DEFAULT 0,
+  max_retries INTEGER DEFAULT 5,
+  next_retry_at TIMESTAMP,
+  error_message TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  processed_at TIMESTAMP,
+  CHECK (status IN ('pending', 'processing', 'success', 'failed'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_payment_webhooks_status ON payment_webhooks(status);
+CREATE INDEX IF NOT EXISTS idx_payment_webhooks_next_retry ON payment_webhooks(next_retry_at);
 

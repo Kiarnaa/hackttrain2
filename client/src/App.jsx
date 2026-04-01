@@ -22,8 +22,10 @@ function App() {
 
   return (
     <Routes>
-      {/* Landing page has its own header — no Navbar wrapper */}
+      {/* These routes use their own LandingPage-style header — no Navbar */}
       <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
       {/* All other routes share the Navbar layout */}
       <Route
@@ -34,8 +36,6 @@ function App() {
             <main className="flex-1">
               <Routes>
                 <Route path="/home" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
                 <Route
                   path="/dashboard"
                   element={
