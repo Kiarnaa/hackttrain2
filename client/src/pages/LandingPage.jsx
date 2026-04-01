@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 
 
 const palette = {
@@ -8,62 +9,22 @@ const palette = {
   beigeDark: "#D4C8B4",
   maroon: "#6B1E2A",
   maroonLight: "#8B2E3A",
-  maroonDark: "#4A1018",
-  text: "#1A1410",
+  maroonDark: "#4a10188f",
+  text: "#1a1410c6",
   textMuted: "#7A6E64",
 };
 
-const products = [
-  {
-    id: 1,
-    name: "Chemise en Lin",
-    price: 65,
-    tag: "Meilleure Vente",
-    desc: "Lin respirant, coupe décontractée et intemporelle.",
-  },
-  {
-    id: 2,
-    name: "Robe en Coton Bio",
-    price: 89,
-    tag: "Nouveau",
-    desc: "Coton biologique certifié, coupe fluide.",
-  },
-  {
-    id: 3,
-    name: "Bottines en Cuir",
-    price: 145,
-    tag: null,
-    desc: "Cuir pleine fleur, semelle en caoutchouc naturel.",
-  },
-  {
-    id: 4,
-    name: "Pull en Cachemire",
-    price: 120,
-    tag: "Limité",
-    desc: "Cachemire 100%, douceur et chaleur exceptionnelles.",
-  },
-];
-
-const categories = ["Tout", "Maison", "Mode", "Cuisine", "Bien-être"];
 
 export default function LandingPage() {
   const [basketCount, setBasketCount] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("Tout");
   const [heroVisible, setHeroVisible] = useState(false);
-  const [addedId, setAddedId] = useState(null);
   const heroRef = useRef(null);
 
   useEffect(() => {
     const t = setTimeout(() => setHeroVisible(true), 80);
     return () => clearTimeout(t);
   }, []);
-
-  const handleAdd = (id) => {
-    setBasketCount((c) => c + 1);
-    setAddedId(id);
-    setTimeout(() => setAddedId(null), 1200);
-  };
 
   return (
     <div style={styles.root}>
@@ -84,10 +45,14 @@ export default function LandingPage() {
         </a>
 
         <nav style={styles.nav}>
-          {["Catalogue", "À Propos", "Connexion"].map((item) => (
-            <a key={item} href="#" style={styles.navLink}>
-              {item}
-            </a>
+          {[
+            { label: "Catalogue", to: "/" },
+            { label: "À Propos", to: "/" },
+            { label: "Connexion", to: "/login" },
+          ].map(({ label, to }) => (
+            <Link key={label} to={to} style={styles.navLink}>
+              {label}
+            </Link>
           ))}
         </nav>
 
@@ -109,10 +74,14 @@ export default function LandingPage() {
       {/* Mobile Menu */}
       {menuOpen && (
         <div style={styles.mobileMenu}>
-          {["Catalogue", "À Propos", "Connexion"].map((item) => (
-            <a key={item} href="#" style={styles.mobileNavLink} onClick={() => setMenuOpen(false)}>
-              {item}
-            </a>
+          {[
+            { label: "Catalogue", to: "/" },
+            { label: "À Propos", to: "/" },
+            { label: "Connexion", to: "/login" },
+          ].map(({ label, to }) => (
+            <Link key={label} to={to} style={styles.mobileNavLink} onClick={() => setMenuOpen(false)}>
+              {label}
+            </Link>
           ))}
         </div>
       )}
@@ -143,7 +112,7 @@ export default function LandingPage() {
             Des objets fabriqués lentement, à la main, conçus pour durer des décennies — pas des saisons.
           </p>
           <div style={styles.heroCta}>
-            <button style={styles.btnPrimary} onClick={() => document.getElementById("catalogue")?.scrollIntoView({ behavior: "smooth" })}>
+            <button style={styles.btnPrimary}>
               Découvrir la Collection
             </button>
             <a href="#" style={styles.btnGhost}>
@@ -163,12 +132,16 @@ export default function LandingPage() {
         >
           <div style={styles.heroCard}>
             <div style={styles.heroCardInner}>
-              <div style={{ width: 72, height: 72, borderRadius: 12, background: palette.beigeDark, opacity: 0.7 }} />
-              <div style={styles.heroCardTag}>Fait Main</div>
+              <img
+                src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&q=80"
+                alt="Veste en Laine"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+              <div style={{ ...styles.heroCardTag, position: "absolute", top: 10, left: 10 }}>Fait Main</div>
             </div>
             <div style={styles.heroCardCaption}>
               <span style={styles.heroCardName}>Veste en Laine</span>
-              <span style={styles.heroCardPrice}>$42</span>
+              <span style={styles.heroCardPrice}>185.000 Ar</span>
             </div>
           </div>
           {/* Floating accent cards */}
@@ -196,69 +169,6 @@ export default function LandingPage() {
         ))}
       </div>
 
-      {/* ── CATALOGUE ── */}
-      <section id="catalogue" style={styles.catalogue}>
-        <div style={styles.sectionHeader}>
-          <h2 style={styles.sectionTitle}>Catalogue</h2>
-          <p style={styles.sectionSub}>Essentiels du quotidien soigneusement sélectionnés.</p>
-        </div>
-
-        {/* Category filter */}
-        <div style={styles.filterRow}>
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              style={{
-                ...styles.filterBtn,
-                ...(activeCategory === cat ? styles.filterBtnActive : {}),
-              }}
-              onClick={() => setActiveCategory(cat)}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* Product grid */}
-        <div style={styles.grid}>
-          {products.map((p, i) => (
-            <div
-              key={p.id}
-              style={{
-                ...styles.card,
-                animationDelay: `${i * 0.08}s`,
-              }}
-            >
-              <div style={styles.cardImg}>
-                <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 36, color: palette.maroon, letterSpacing: "0.12em", opacity: 0.7 }}>
-                  {p.name.split(" ").slice(-1)[0].toUpperCase()}
-                </span>
-                {p.tag && <span style={styles.cardTag}>{p.tag}</span>}
-              </div>
-              <div style={styles.cardBody}>
-                <div style={styles.cardTop}>
-                  <span style={styles.cardName}>{p.name}</span>
-                  <span style={styles.cardPrice}>${p.price}</span>
-                </div>
-                <p style={styles.cardDesc}>{p.desc}</p>
-                <button
-                  style={{
-                    ...styles.addBtn,
-                    ...(addedId === p.id ? styles.addBtnAdded : {}),
-                  }}
-                  onClick={() => handleAdd(p.id)}
-                >
-                  {addedId === p.id ? "Ajouté ✓" : "Ajouter au Panier"}
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div style={{ textAlign: "center", marginTop: 48 }}>
-          <button style={styles.btnPrimary}>Voir Tous les Produits</button>
-        </div>
-      </section>
 
       {/* ── EDITORIAL STRIP ── */}
       <section style={styles.editorial}>
@@ -556,14 +466,11 @@ const styles = {
     width: 240,
   },
   heroCardInner: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 12,
-    marginBottom: 20,
-    background: palette.beigeLight,
+    position: "relative",
+    marginBottom: 16,
     borderRadius: 12,
-    padding: "24px 0",
+    overflow: "hidden",
+    height: 200,
   },
   heroCardTag: {
     background: palette.maroon,
