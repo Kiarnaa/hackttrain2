@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const paymentRoutes = require("./routes/payments");
+const produitsRoutes = require("./routes/produits");
 const errorHandler = require("./middleware/errorHandler");
 const initDb = require("./config/initDb");
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/produits", produitsRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "OK", timestamp: new Date().toISOString() });
