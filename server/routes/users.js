@@ -1,28 +1,11 @@
-const express = require("express");
-const { body } = require("express-validator");
-const {
-  getAllUsers,
-  getUserById,
-  updateUser,
-  deleteUser,
-} = require("../controllers/userController");
-const { protect, adminOnly } = require("../middleware/auth");
-
+const express = require('express');
 const router = express.Router();
+const { getUsers, getUserById, updateUser, deleteUser } = require('../controller/userController');
+const auth = require('../middleware/auth');
 
-router.get("/", protect, adminOnly, getAllUsers);
-router.get("/:id", protect, getUserById);
-
-router.put(
-  "/:id",
-  protect,
-  [
-    body("name").trim().notEmpty().withMessage("Name is required"),
-    body("email").isEmail().withMessage("Valid email is required"),
-  ],
-  updateUser
-);
-
-router.delete("/:id", protect, deleteUser);
+router.get('/', auth, getUsers);
+router.get('/:id', auth, getUserById);
+router.put('/:id', auth, updateUser);
+router.delete('/:id', auth, deleteUser);
 
 module.exports = router;
