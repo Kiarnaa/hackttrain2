@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
+const paymentRoutes = require("./routes/payments");
 const errorHandler = require("./middleware/errorHandler");
 const initDb = require("./config/initDb");
 
@@ -15,6 +16,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/payments", paymentRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "OK", timestamp: new Date().toISOString() });
@@ -31,6 +33,9 @@ initDb()
     });
   })
   .catch((err) => {
-    console.error("Failed to initialize database:", err);
-    process.exit(1);
+    console.error("Failed to initialize database:", err.message);
+    console.warn("⚠️  Continuing without database - using mock mode only");
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT} (without database)`);
+    });
   });
