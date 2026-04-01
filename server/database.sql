@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS users (
   email VARCHAR(255) NOT NULL UNIQUE,
   username VARCHAR(255) NOT NULL,
   age INT CHECK (age >= 18),
-  password VARCHAR(255) NOT NULL
+  password VARCHAR(255) NOT NULL,
+  phone VARCHAR(20)
 );
 
 CREATE TABLE IF NOT EXISTS products (
@@ -31,6 +32,13 @@ CREATE TABLE IF NOT EXISTS admin (
 CREATE TABLE IF NOT EXISTS categories (
   id_categories SERIAL PRIMARY KEY,
   id_products INTEGER REFERENCES products(id_products) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS command (
+  id_command SERIAL PRIMARY KEY,
+  id_users INTEGER NOT NULL REFERENCES users(id_users) ON DELETE CASCADE,
+  id_products INTEGER NOT NULL REFERENCES products(id_products) ON DELETE CASCADE,
+  quantity INTEGER NOT NULL CHECK (quantity > 0)
 );
 
 CREATE TABLE IF NOT EXISTS livraison (
@@ -76,3 +84,4 @@ CREATE TABLE IF NOT EXISTS payment_webhooks (
 CREATE INDEX IF NOT EXISTS idx_payment_webhooks_status ON payment_webhooks(status);
 CREATE INDEX IF NOT EXISTS idx_payment_webhooks_next_retry ON payment_webhooks(next_retry_at);
 
+  

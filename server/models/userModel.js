@@ -6,19 +6,19 @@ const findByEmail = async (email) => {
 };
 
 const findById = async (id) => {
-  const result = await db.query('SELECT id_users, username, email, age FROM users WHERE id_users = $1', [id]);
+  const result = await db.query('SELECT id_users, username, email, age, phone FROM users WHERE id_users = $1', [id]);
   return result.rows[0] || null;
 };
 
 const findAll = async () => {
-  const result = await db.query('SELECT id_users, username, email, age FROM users');
+  const result = await db.query('SELECT id_users, username, email, age, phone FROM users');
   return result.rows;
 };
 
-const createUser = async ({ username, email, password, age }) => {
+const createUser = async ({ username, email, password, age, phone }) => {
   const result = await db.query(
-    'INSERT INTO users (username, email, password, age) VALUES ($1, $2, $3, $4) RETURNING id_users, username, email, age',
-    [username, email, password, age || null]
+    'INSERT INTO users (username, email, password, age, phone) VALUES ($1, $2, $3, $4, $5) RETURNING id_users, username, email, age, phone',
+    [username, email, password, age || null, phone || null]
   );
   return result.rows[0];
 };
@@ -29,7 +29,7 @@ const updateUser = async (id, fields) => {
   let index = 1;
 
   for (const [key, value] of Object.entries(fields)) {
-    if (!['username', 'email', 'password', 'age'].includes(key)) continue;
+    if (!['username', 'email', 'password', 'age', 'phone'].includes(key)) continue;
     setClauses.push(`${key} = $${index}`);
     values.push(value);
     index += 1;
@@ -40,7 +40,7 @@ const updateUser = async (id, fields) => {
   }
 
   values.push(id);
-  const query = `UPDATE users SET ${setClauses.join(', ')} WHERE id_users = $${index} RETURNING id_users, username, email, age`;
+  const query = `UPDATE users SET ${setClauses.join(', ')} WHERE id_users = $${index} RETURNING id_users, username, email, age, phone`;
   const result = await db.query(query, values);
   return result.rows[0] || null;
 };
