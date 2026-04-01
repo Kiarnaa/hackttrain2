@@ -9,7 +9,7 @@ const palette = {
   beigeDark: "#D4C8B4",
   maroon: "#6B1E2A",
   maroonLight: "#8B2E3A",
-  maroonDark: "#4a10188f",
+  maroonDark: "#4a1018c3",
   text: "#1a1410c6",
   textMuted: "#7A6E64",
 };
@@ -201,8 +201,7 @@ export default function LandingPage() {
         <div style={styles.footerTop}>
           <div>
             <span style={styles.logo}>
-              <span style={styles.logoMark}>◆</span>
-              <span style={styles.logoText}>Maren</span>
+              <span style={styles.logoText}>ETHKL</span>
             </span>
             <p style={styles.footerTagline}>Des objets qui méritent d'être gardés.</p>
           </div>
