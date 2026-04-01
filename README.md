@@ -1,6 +1,6 @@
 # HackTTrain2
 
-A full-stack PERN application (PostgreSQL, Express, React, Node.js) with JWT authentication, protected routes, and a modern TailwindCSS UI.
+A full-stack PERN application (PostgreSQL, Express, React, Node.js) with JWT authentication, protected routes, and a modern TailwindCSS UI
 
 ## Project Structure
 
