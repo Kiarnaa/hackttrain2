@@ -11,11 +11,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white border-b border-gray-200 shadow-sm">
+    <nav className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center gap-2">
-            <span className="text-xl font-bold text-primary-600">HackTTrain2</span>
+            <span className="text-xl font-bold text-amber-800">HackTTrain2</span>
           </Link>
 
           <div className="flex items-center gap-4">
@@ -23,32 +23,33 @@ const Navbar = () => {
               <>
                 <Link
                   to="/dashboard"
-                  className="text-gray-600 hover:text-primary-600 font-medium transition-colors"
+                  className="text-stone-700 hover:text-amber-800 font-medium transition-colors"
                 >
                   Dashboard
                 </Link>
                 <Link
                   to="/profile"
-                  className="text-gray-600 hover:text-primary-600 font-medium transition-colors"
+                  className="text-stone-700 hover:text-amber-800 font-medium transition-colors"
                 >
                   Profile
                 </Link>
-                <button onClick={handleLogout} className="btn-secondary text-sm">
+                <button onClick={handleLogout} className="bg-amber-700 text-white px-4 py-2 rounded-md font-medium hover:bg-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors text-sm">
                   Logout
                 </button>
               </>
             ) : (
               <>
-                <Link to="/login" className="text-gray-600 hover:text-primary-600 font-medium transition-colors">
+                <Link to="/login" className="text-stone-700 hover:text-amber-800 font-medium transition-colors">
                   Login
                 </Link>
-                <Link to="/register" className="btn-primary text-sm">
+                <Link to="/register" className="bg-amber-700 text-white px-4 py-2 rounded-md font-medium hover:bg-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors text-sm">
                   Sign Up
                 </Link>
               </>
             )}
           </div>
         </div>
+        <div className="w-full h-0.5 bg-amber-700"></div>
       </div>
     </nav>
   );
