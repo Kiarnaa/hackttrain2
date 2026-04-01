@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { motion } from "framer-motion";
 import LandingHeader from "../components/LandingHeader";
 
 const Register = () => {
@@ -33,17 +34,59 @@ const Register = () => {
   return (
     <div style={styles.page}>
       <LandingHeader />
-      <div style={styles.body}>
-        <div style={styles.card}>
-          <p style={styles.eyebrow}>Rejoignez-nous</p>
-          <h2 style={styles.title}>Créer un compte</h2>
+      <motion.div
+        style={styles.body}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.div
+          style={styles.card}
+          initial={{ y: 24, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+        >
+          <motion.p
+            style={styles.eyebrow}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            Rejoignez-nous
+          </motion.p>
+          <motion.h2
+            style={styles.title}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+          >
+            Créer un compte
+          </motion.h2>
 
           {error && (
-            <div style={styles.errorBox}>{error}</div>
+            <motion.div
+              style={styles.errorBox}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              {error}
+            </motion.div>
           )}
 
-          <form onSubmit={handleSubmit} style={styles.form}>
-            <div style={styles.field}>
+          <motion.form
+            onSubmit={handleSubmit}
+            style={styles.form}
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.4 } },
+            }}
+          >
+            <motion.div
+              style={styles.field}
+              variants={{ hidden: { x: -16, opacity: 0 }, visible: { x: 0, opacity: 1 } }}
+            >
               <label style={styles.label}>Nom complet</label>
               <input
                 type="text"
@@ -54,8 +97,11 @@ const Register = () => {
                 placeholder="Jean Dupont"
                 required
               />
-            </div>
-            <div style={styles.field}>
+            </motion.div>
+            <motion.div
+              style={styles.field}
+              variants={{ hidden: { x: -16, opacity: 0 }, visible: { x: 0, opacity: 1 } }}
+            >
               <label style={styles.label}>Adresse e-mail</label>
               <input
                 type="email"
@@ -66,8 +112,11 @@ const Register = () => {
                 placeholder="vous@exemple.com"
                 required
               />
-            </div>
-            <div style={styles.field}>
+            </motion.div>
+            <motion.div
+              style={styles.field}
+              variants={{ hidden: { x: -16, opacity: 0 }, visible: { x: 0, opacity: 1 } }}
+            >
               <label style={styles.label}>Mot de passe</label>
               <input
                 type="password"
@@ -78,23 +127,25 @@ const Register = () => {
                 placeholder="Min. 6 caractères"
                 required
               />
-            </div>
+            </motion.div>
 
-            <button
+            <motion.button
               type="submit"
               disabled={loading}
               style={{ ...styles.btn, opacity: loading ? 0.7 : 1 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
             >
               {loading ? "Création en cours..." : "Créer mon compte"}
-            </button>
-          </form>
+            </motion.button>
+          </motion.form>
 
           <p style={styles.footer}>
             Déjà un compte ?{" "}
             <Link to="/login" style={styles.link}>Se connecter</Link>
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };
