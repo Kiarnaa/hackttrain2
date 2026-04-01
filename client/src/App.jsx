@@ -23,9 +23,9 @@ function App() {
   return (
     <Routes>
       {/* These routes use their own LandingPage-style header — no Navbar */}
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/landingPage" element={<LandingPage />} />
 
       {/* All other routes share the Navbar layout */}
       <Route

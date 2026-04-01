@@ -11,6 +11,10 @@ const {
   handleMvolaError,
 } = mvola;
 
+const PaymentWebhook = require("../models/webhookModels");
+const notificationService = require("../services/notificationService");
+const { v4: uuidv4 } = require("uuid");
+
 // Log which API is being used
 console.log(`📡 Using ${useMock ? "MOCK" : "REAL"} MVola API`);
 
@@ -121,9 +125,57 @@ exports.pollPayment = async (req, res, next) => {
 exports.webhook = async (req, res) => {
   try {
     console.log("📨 Webhook MVola reçu:", req.body);
-    // TODO: Sauvegarder le statut en base de données
-    // TODO: Notifier le client (WebSocket, email, etc.)
-    res.json({ success: true });
+
+    // Extract webhook payload
+    const {
+      webhook_id,
+      id_command,
+      id_payment,
+      status,
+      amount,
+      error_message,
+      transactionReference,
+    } = req.body;
+
+    // Validation
+    if (!webhook_id || !id_command) {
+      return res.status(400).json({
+        error: "webhook_id et id_command sont requis",
+      });
+    }
+
+    // Normalize status to match payment_webhooks table constraints
+    // MVola returns: pending, processing, success, failed
+    let normalizedStatus = status ? status.toLowerCase() : "pending";
+    if (normalizedStatus === "completed") normalizedStatus = "success";
+
+    // Save webhook to database
+    const webhook = await PaymentWebhook.create(
+      webhook_id || uuidv4(),
+      id_payment,
+      id_command,
+      {
+        webhook_id,
+        id_command,
+        id_payment,
+        status: normalizedStatus,
+        amount,
+        error_message,
+        transactionReference,
+        receivedAt: new Date().toISOString(),
+      }
+    );
+
+    console.log(`✓ Webhook enregistré: ${webhook.id_webhook}`);
+
+    // Send notification if status is success or failed
+    if (normalizedStatus === "success" || normalizedStatus === "failed") {
+      notificationService
+        .notifyPaymentStatusChange(id_command, normalizedStatus, amount)
+        .catch((err) => console.error("Notification error:", err));
+    }
+
+    res.json({ success: true, id_webhook: webhook.id_webhook });
   } catch (error) {
     console.error("Erreur webhook:", error);
     res.status(500).json({ error: error.message });

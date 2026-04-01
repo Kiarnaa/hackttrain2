@@ -1,4 +1,5 @@
 const Livraison = require('../models/livraisonModels');
+const notificationService = require('../services/notificationService');
 
 // POST - Créer une nouvelle livraison
 exports.createLivraison = async (req, res) => {
@@ -180,6 +181,9 @@ exports.updateLivraison = async (req, res) => {
       });
     }
 
+    // Fetch old livraison to detect status change
+    const oldLivraison = await Livraison.findById(id_livraison);
+
     const updatedLivraison = await Livraison.update(
       id_livraison,
       id_command,
@@ -192,6 +196,16 @@ exports.updateLivraison = async (req, res) => {
         success: false,
         message: 'Livraison non trouvée'
       });
+    }
+
+    // Send notification if status changed
+    if (oldLivraison && oldLivraison.status !== updatedLivraison.status) {
+      notificationService.notifyLivraisonStatusChange(
+        updatedLivraison.id_livraison,
+        updatedLivraison.id_command,
+        oldLivraison.status,
+        updatedLivraison.status
+      ).catch(err => console.error('Notification error:', err));
     }
 
     res.status(200).json({
