@@ -8,6 +8,8 @@ const Register = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [ageConfirmed, setAgeConfirmed] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -17,6 +19,14 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    if (!ageConfirmed) {
+      setError("Vous devez confirmer que vous avez plus de 18 ans.");
+      return;
+    }
+    if (!termsAccepted) {
+      setError("Vous devez accepter les conditions d'utilisation.");
+      return;
+    }
     setLoading(true);
     try {
       await register(form.name, form.email, form.password);
@@ -24,7 +34,7 @@ const Register = () => {
     } catch (err) {
       const msgs = err.response?.data?.errors;
       setError(
-        msgs ? msgs.map((e) => e.msg).join(", ") : err.response?.data?.message || "Registration failed."
+        msgs ? msgs.map((e) => e.msg).join(", ") : err.response?.data?.message || "Échec de l'inscription."
       );
     } finally {
       setLoading(false);
@@ -127,6 +137,40 @@ const Register = () => {
                 placeholder="Min. 6 caractères"
                 required
               />
+            </motion.div>
+
+            <motion.div
+              style={{ ...styles.field, flexDirection: 'row', alignItems: 'center' }}
+              variants={{ hidden: { x: -16, opacity: 0 }, visible: { x: 0, opacity: 1 } }}
+            >
+              <input
+                type="checkbox"
+                id="ageConfirmed"
+                checked={ageConfirmed}
+                onChange={(e) => setAgeConfirmed(e.target.checked)}
+                style={{ marginRight: 8, accentColor: palette.maroon }}
+                required
+              />
+              <label htmlFor="ageConfirmed" style={{ ...styles.label, margin: 0, fontSize: 14 }}>
+                J'ai plus de 18 ans
+              </label>
+            </motion.div>
+
+            <motion.div
+              style={{ ...styles.field, flexDirection: 'row', alignItems: 'center' }}
+              variants={{ hidden: { x: -16, opacity: 0 }, visible: { x: 0, opacity: 1 } }}
+            >
+              <input
+                type="checkbox"
+                id="termsAccepted"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                style={{ marginRight: 8, accentColor: palette.maroon }}
+                required
+              />
+              <label htmlFor="termsAccepted" style={{ ...styles.label, margin: 0, fontSize: 14 }}>
+                J'accepte les conditions d'utilisation
+              </label>
             </motion.div>
 
             <motion.button
