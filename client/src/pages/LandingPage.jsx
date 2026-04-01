@@ -48,7 +48,7 @@ export default function LandingPage() {
         <nav style={styles.nav}>
           {[
             { label: "Catalogue", to: "/" },
-            { label: "À Propos", to: "/" },
+            { label: "À Propos", to: "/about" },
             { label: "Connexion", to: "/login" },
           ].map(({ label, to }) => (
             <Link key={label} to={to} style={styles.navLink}>
@@ -77,7 +77,7 @@ export default function LandingPage() {
         <div style={styles.mobileMenu}>
           {[
             { label: "Catalogue", to: "/" },
-            { label: "À Propos", to: "/" },
+            { label: "À Propos", to: "/about" },
             { label: "Connexion", to: "/login" },
           ].map(({ label, to }) => (
             <Link key={label} to={to} style={styles.mobileNavLink} onClick={() => setMenuOpen(false)}>

@@ -42,7 +42,7 @@ export default function LandingHeader() {
               to={to}
               style={{
                 ...styles.navLink,
-                ...(pathname === to && label === "Connexion" ? styles.navLinkActive : {}),
+                ...(pathname === to && to !== "/" ? styles.navLinkActive : {}),
               }}
             >
               {label}
