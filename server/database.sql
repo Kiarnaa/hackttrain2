@@ -15,6 +15,13 @@ CREATE TABLE IF NOT EXISTS products (
   image_url VARCHAR(255)
 );
 
+-- Add new columns if they don't exist
+ALTER TABLE products ADD COLUMN IF NOT EXISTS size VARCHAR(50);
+ALTER TABLE products ADD COLUMN IF NOT EXISTS color VARCHAR(50);
+ALTER TABLE products ADD COLUMN IF NOT EXISTS hover_image VARCHAR(255);
+ALTER TABLE products ADD COLUMN IF NOT EXISTS delivery VARCHAR(100);
+ALTER TABLE products ADD COLUMN IF NOT EXISTS published BOOLEAN DEFAULT true;
+
 CREATE TABLE IF NOT EXISTS wishlists (
   id_wishlists SERIAL PRIMARY KEY,
   id_users INTEGER REFERENCES users(id_users) ON DELETE CASCADE,
