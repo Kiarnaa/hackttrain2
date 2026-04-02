@@ -531,4 +531,5 @@ const styles = {
     fontWeight: 500,
     transition: "background 0.2s ease",
   },
-};
+}
+}
