@@ -42,20 +42,17 @@ export default function CartDrawer() {
   const { items, removeItem, updateQty, count, total, isOpen, setIsOpen } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [ordered, setOrdered] = useState(false);
-
   const handleClose = () => {
     setIsOpen(false);
-    setOrdered(false);
   };
 
   const handleCommander = () => {
+    handleClose();
     if (!user) {
-      handleClose();
       navigate("/login");
-      return;
+    } else {
+      navigate("/checkout");
     }
-    setOrdered(true);
   };
 
   return (
@@ -248,30 +245,18 @@ export default function CartDrawer() {
               <span>{fmtPrice(total >= 50 ? total : total + 5)}</span>
             </div>
 
-            {ordered ? (
-              <div style={{
-                background: "#3a7d4c", color: "#fff",
-                borderRadius: 8, padding: "16px",
-                textAlign: "center", fontSize: 14, fontWeight: 500,
-              }}>
-                <div style={{ fontSize: 22, marginBottom: 6 }}>✓</div>
-                Commande reçue ! Merci {user?.name?.split(" ")[0]}.
-                <div style={{ fontSize: 12, marginTop: 4, opacity: .8 }}>Nous vous contacterons bientôt.</div>
-              </div>
-            ) : (
-              <button
-                onClick={handleCommander}
-                style={{
-                  width: "100%", padding: "14px 0",
-                  background: pal.maroon, color: "#fff",
-                  border: "none", borderRadius: 8,
-                  fontSize: 15, fontWeight: 500,
-                  letterSpacing: ".04em", cursor: "pointer",
-                }}
-              >
-                {user ? "Commander →" : "Se connecter pour commander"}
-              </button>
-            )}
+            <button
+              onClick={handleCommander}
+              style={{
+                width: "100%", padding: "14px 0",
+                background: pal.maroon, color: "#fff",
+                border: "none", borderRadius: 8,
+                fontSize: 15, fontWeight: 500,
+                letterSpacing: ".04em", cursor: "pointer",
+              }}
+            >
+              {user ? "Commander →" : "Se connecter pour commander"}
+            </button>
             <button
               onClick={handleClose}
               style={{

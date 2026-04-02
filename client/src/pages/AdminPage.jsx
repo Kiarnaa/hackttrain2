@@ -207,18 +207,19 @@ export default function AdminPage() {
       {/* ── MODAL ── */}
       {showModal && (
         <>
+          {console.log("Modal should be visible")}
           <div style={styles.modalOverlay}>
-            <div style={styles.modalContent}>
-              <button
-                style={styles.modalClose}
-                onClick={() => setShowModal(false)}
-              >
-                ×
-              </button>
-              <h2 style={styles.modalTitle}>
-                {editingProduct ? "Modifier le Produit" : "Ajouter un Produit"}
-              </h2>
-              <form onSubmit={handleSubmit} style={styles.form}>
+          <div style={styles.modalContent}>
+            <button
+              style={styles.modalClose}
+              onClick={() => setShowModal(false)}
+            >
+              ×
+            </button>
+            <h2 style={styles.modalTitle}>
+              {editingProduct ? "Modifier le Produit" : "Ajouter un Produit"}
+            </h2>
+            <form onSubmit={handleSubmit} style={styles.form}>
               <div style={styles.formGroup}>
                 <label style={styles.label}>Nom</label>
                 <input
