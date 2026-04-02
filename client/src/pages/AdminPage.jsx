@@ -14,6 +14,8 @@ const palette = {
 };
 
 export default function AdminPage() {
+  console.log("AdminPage component rendering");
+
   const [products, setProducts] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -30,6 +32,7 @@ export default function AdminPage() {
   });
 
   useEffect(() => {
+    console.log("AdminPage useEffect running");
     fetchProducts();
   }, []);
 
@@ -120,8 +123,8 @@ export default function AdminPage() {
   };
 
   return (
-    <div style={styles.root}>
-      {/* ── HEADER ── */}
+    <>
+      <div style={styles.root}>
       <header style={styles.header}>
         <a href="#" style={styles.logo}>
           <span style={styles.logoText}>ETHKL Admin</span>
@@ -204,19 +207,18 @@ export default function AdminPage() {
       {/* ── MODAL ── */}
       {showModal && (
         <>
-          {console.log("Modal should be visible")}
           <div style={styles.modalOverlay}>
-          <div style={styles.modalContent}>
-            <button
-              style={styles.modalClose}
-              onClick={() => setShowModal(false)}
-            >
-              ×
-            </button>
-            <h2 style={styles.modalTitle}>
-              {editingProduct ? "Modifier le Produit" : "Ajouter un Produit"}
-            </h2>
-            <form onSubmit={handleSubmit} style={styles.form}>
+            <div style={styles.modalContent}>
+              <button
+                style={styles.modalClose}
+                onClick={() => setShowModal(false)}
+              >
+                ×
+              </button>
+              <h2 style={styles.modalTitle}>
+                {editingProduct ? "Modifier le Produit" : "Ajouter un Produit"}
+              </h2>
+              <form onSubmit={handleSubmit} style={styles.form}>
               <div style={styles.formGroup}>
                 <label style={styles.label}>Nom</label>
                 <input
@@ -325,10 +327,11 @@ export default function AdminPage() {
             </form>
           </div>
         </div>
+        </>
       )}
-    </div>
+      </div>
+    </>
   );
-}
 
 /* ── STYLES ── */
 const styles = {

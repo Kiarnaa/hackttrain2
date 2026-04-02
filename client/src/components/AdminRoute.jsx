@@ -14,18 +14,23 @@ const AdminRoute = ({ children }) => {
     );
   }
 
+  // TEMPORAIREMENT DÉSACTIVÉ POUR TESTER
   // Liste des emails admin autorisés
-  const adminEmails = [
-    "admin@ethkl.com",
-    "superadmin@ethkl.com",
-    "testadmin@example.com"  // Pour les tests
-    // Ajoutez ici les emails des admins
-  ];
+  // const adminEmails = [
+  //   "admin@ethkl.com",
+  //   "superadmin@ethkl.com",
+  //   "testadmin@example.com"  // Pour les tests
+  //   // Ajoutez ici les emails des admins
+  // ];
 
-  const isAdmin = user && adminEmails.includes(user.email);
-  console.log("AdminRoute - isAdmin:", isAdmin, "user email:", user?.email);
+  // const isAdmin = user && adminEmails.includes(user.email);
+  // console.log("AdminRoute - isAdmin:", isAdmin, "user email:", user?.email);
 
-  return isAdmin ? children : <Navigate to="/" replace />;
+  // return isAdmin ? children : <Navigate to="/" replace />;
+
+  // TEMPORAIRE : Toujours autoriser l'accès pour tester
+  console.log("AdminRoute - Access granted (temporary)");
+  return children;
 };
 
 export default AdminRoute;
