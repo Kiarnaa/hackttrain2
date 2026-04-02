@@ -200,9 +200,10 @@ const styles = {
     textDecoration: "none",
     padding: "4px 10px 4px 4px",
     borderRadius: 24,
-    border: `1px solid ${palette.beige}`,
+    border: `1px solid ${palette.beigeDark}`,
     background: palette.beigeLight,
-    transition: "border-color .2s",
+    cursor: "pointer",
+    transition: "border-color .2s, background .2s",
   },
   avatarCircle: {
     width: 30,
