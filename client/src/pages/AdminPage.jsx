@@ -42,6 +42,29 @@ export default function AdminPage() {
       setProducts(response.data.produits);
     } catch (error) {
       console.error("Error fetching products:", error);
+      // Fallback to mock data if API fails
+      setProducts([
+        {
+          id_products: 1,
+          name: "Produit Test 1",
+          price: 50000,
+          size: "M",
+          color: "Rouge",
+          hover_image: "https://via.placeholder.com/100",
+          delivery: "Standard",
+          published: true
+        },
+        {
+          id_products: 2,
+          name: "Produit Test 2",
+          price: 75000,
+          size: "L",
+          color: "Bleu",
+          hover_image: "https://via.placeholder.com/100",
+          delivery: "Express",
+          published: false
+        }
+      ]);
     }
   };
 
@@ -124,7 +147,9 @@ export default function AdminPage() {
 
   return (
     <>
+      {console.log("AdminPage JSX rendering")}
       <div style={styles.root}>
+        <h1>Test: Admin Page Loading...</h1>
       <header style={styles.header}>
         <a href="#" style={styles.logo}>
           <span style={styles.logoText}>ETHKL Admin</span>
@@ -531,3 +556,4 @@ const styles = {
     transition: "background 0.2s ease",
   },
 };
+}
