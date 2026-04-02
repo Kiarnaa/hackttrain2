@@ -1,5 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
+import { CartProvider } from "./context/CartContext";
+import { WishlistProvider } from "./context/WishlistContext";
+import CartDrawer from "./components/CartDrawer";
 import Navbar from "./components/Navbar";
 import LandingPage from "./pages/LandingPage";
 import Home from "./pages/Home";
@@ -9,7 +12,6 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import AdminPage from "./pages/AdminPage";
 import ProtectedRoute from "./components/ProtectedRoute";
-import AdminRoute from "./components/AdminRoute";
 
 function App() {
   const { loading } = useAuth();
@@ -23,11 +25,17 @@ function App() {
   }
 
   return (
-    <Routes>
+    <WishlistProvider>
+    <CartProvider>
+      <CartDrawer />
+      <Routes>
       {/* These routes use their own LandingPage-style header — no Navbar */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/catalogue" element={<ProductsPage />} />
+      <Route path="/mon-compte" element={<MonCompte />} />
 
       {/* All other routes share the Navbar layout */}
       <Route
@@ -68,7 +76,9 @@ function App() {
           </div>
         }
       />
-    </Routes>
+      </Routes>
+    </CartProvider>
+    </WishlistProvider>
   );
 }
 

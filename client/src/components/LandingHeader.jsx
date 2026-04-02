@@ -1,4 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 const palette = {
   white: "#FAFAF8",
@@ -10,13 +12,30 @@ const palette = {
   textMuted: "#7A6E64",
 };
 
+function BasketIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <path d="M16 10a4 4 0 01-8 0"/>
+    </svg>
+  );
+}
+
+function initials(name = "") {
+  return name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
+}
+
 export default function LandingHeader() {
   const { pathname } = useLocation();
+  const { count, setIsOpen } = useCart();
+  const { user } = useAuth();
 
   const navItems = [
-    { label: "Catalogue", to: "/" },
-    { label: "À Propos", to: "/" },
-    { label: "Connexion", to: "/login" },
+    { label: "Catalogue", to: "/catalogue" },
+    { label: "À Propos", to: "/about" },
+    ...(!user ? [{ label: "Connexion", to: "/login" }] : []),
   ];
 
   return (
@@ -25,7 +44,7 @@ export default function LandingHeader() {
         <span style={styles.bannerDot} />
         <span style={styles.bannerText}>
           Livraison gratuite pour les commandes supérieures à{" "}
-          <strong style={{ fontWeight: 700 }}>50.000 MGA</strong> — sans code promo
+          <strong style={{ fontWeight: 700 }}>200.000 MGA</strong> — sans code promo
         </span>
         <span style={styles.bannerDot} />
       </div>
@@ -42,13 +61,34 @@ export default function LandingHeader() {
               to={to}
               style={{
                 ...styles.navLink,
-                ...(pathname === to && label === "Connexion" ? styles.navLinkActive : {}),
+                ...(pathname === to && to !== "/" ? styles.navLinkActive : {}),
               }}
             >
               {label}
             </Link>
           ))}
         </nav>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          {user && (
+            <Link to="/mon-compte" style={styles.avatarBtn} title={user.name}>
+              <span style={styles.avatarCircle}>{initials(user.name)}</span>
+              <span style={{ fontSize: 13, color: palette.textMuted, letterSpacing: ".04em" }}>
+                {user.name.split(" ")[0]}
+              </span>
+            </Link>
+          )}
+          <button
+            onClick={() => setIsOpen(true)}
+            aria-label="Panier"
+            style={styles.basketBtn}
+          >
+            <BasketIcon />
+            {count > 0 && (
+              <span style={styles.badge}>{count}</span>
+            )}
+          </button>
+        </div>
       </header>
 
       <style>{`
@@ -125,5 +165,58 @@ const styles = {
   navLinkActive: {
     color: palette.maroon,
     fontWeight: 500,
+  },
+  basketBtn: {
+    position: "relative",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    color: palette.text,
+    display: "flex",
+    alignItems: "center",
+    padding: 6,
+    borderRadius: 6,
+  },
+  badge: {
+    position: "absolute",
+    top: -2,
+    right: -4,
+    background: palette.maroon,
+    color: "#fff",
+    borderRadius: "50%",
+    width: 18,
+    height: 18,
+    fontSize: 10,
+    fontWeight: 700,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    pointerEvents: "none",
+  },
+  avatarBtn: {
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+    textDecoration: "none",
+    padding: "4px 10px 4px 4px",
+    borderRadius: 24,
+    border: `1px solid ${palette.beige}`,
+    background: palette.beigeLight,
+    transition: "border-color .2s",
+  },
+  avatarCircle: {
+    width: 30,
+    height: 30,
+    borderRadius: "50%",
+    background: palette.maroon,
+    color: "#fff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: 11,
+    fontWeight: 700,
+    fontFamily: "'Cormorant Garamond', serif",
+    letterSpacing: ".04em",
+    flexShrink: 0,
   },
 };
