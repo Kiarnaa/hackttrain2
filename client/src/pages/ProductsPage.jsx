@@ -424,13 +424,13 @@ export default function ProductsPage() {
         const formattedProducts = produits.map(p => ({
           id: p.id_products,
           category: p.category || "Vêtements",
-          sub: p.subcategory || "Hauts",
+          sub: p.sub || "Hauts",
           name: p.name,
-          price: Math.round(p.price / 1000),
-          oldPrice: p.oldPrice || null,
+          price: parseFloat(p.price),
+          oldPrice: p.old_price ? parseFloat(p.old_price) : null,
           tag: p.tag || null,
-          sizes: p.sizes || [],
-          colors: p.colors || [],
+          sizes: p.size ? p.size.split(',') : [],
+          colors: p.color ? p.color.split(',') : [],
           img: p.image_url,
           imgHover: p.hover_image || p.image_url,
           desc: p.description
