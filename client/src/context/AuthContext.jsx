@@ -3,6 +3,8 @@ import api from "../api/axios";
 
 const AuthContext = createContext(null);
 
+const normalizeUser = (u) => u ? { ...u, name: u.name || u.username || "" } : null;
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(() => localStorage.getItem("token"));
@@ -16,7 +18,7 @@ export const AuthProvider = ({ children }) => {
       }
       try {
         const res = await api.get("/auth/me");
-        setUser(res.data.user);
+        setUser(normalizeUser(res.data.user));
       } catch {
         setToken(null);
         localStorage.removeItem("token");
@@ -30,16 +32,16 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     const res = await api.post("/auth/login", { email, password });
     const { user, token } = res.data;
-    setUser(user);
+    setUser(normalizeUser(user));
     setToken(token);
     localStorage.setItem("token", token);
-    return user;
+    return normalizeUser(user);
   };
 
   const register = async (name, email, password) => {
     const res = await api.post("/auth/register", { name, email, password });
     const { user, token } = res.data;
-    setUser(user);
+    setUser(normalizeUser(user));
     setToken(token);
     localStorage.setItem("token", token);
     return user;

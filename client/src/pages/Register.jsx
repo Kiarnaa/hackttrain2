@@ -30,7 +30,7 @@ const Register = () => {
     setLoading(true);
     try {
       await register(form.name, form.email, form.password);
-      navigate("/AdminPage");
+      navigate("/home");
     } catch (err) {
       const msgs = err.response?.data?.errors;
       setError(

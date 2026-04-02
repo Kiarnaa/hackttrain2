@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 
@@ -24,18 +24,29 @@ function initials(name = "") {
 export default function LandingPage() {
   const { user } = useAuth();
   const { count: basketCount, setIsOpen: openCart } = useCart();
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showStory, setShowStory] = useState(false);
   const [heroVisible, setHeroVisible] = useState(false);
   const heroRef = useRef(null);
 
   useEffect(() => {
+    if (user) {
+      navigate("/home", { replace: true });
+      return;
+    }
     const t = setTimeout(() => setHeroVisible(true), 80);
     return () => clearTimeout(t);
-  }, []);
+  }, [user, navigate]);
 
   return (
     <div style={styles.root}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap');
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: ${palette.white}; }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+      `}</style>
+
       {/* ── TOP BANNER ── */}
       <div style={styles.banner}>
         <span style={styles.bannerDot} />
@@ -48,84 +59,57 @@ export default function LandingPage() {
 
       {/* ── HEADER ── */}
       <header style={styles.header}>
-        <a href="#" style={styles.logo}>
+        <a href="/" style={styles.logo}>
           <span style={styles.logoText}>ETHKL</span>
         </a>
-
         <nav style={styles.nav}>
           {[
             { label: "Catalogue", to: "/catalogue" },
             { label: "À Propos", to: "/about" },
-            ...(!user ? [{ label: "Connexion", to: "/login" }] : []),
+            { label: "Connexion", to: "/login" },
           ].map(({ label, to }) => (
-            <Link key={label} to={to} style={styles.navLink}>
-              {label}
-            </Link>
+            <Link key={label} to={to} style={styles.navLink}>{label}</Link>
           ))}
-          {user && user.name && (
-            <Link to="/mon-compte" style={{
-              ...styles.navLink,
-              display: "flex", alignItems: "center", gap: 6,
-              textDecoration: "none",
-            }}>
-              <span style={{
-                width: 24, height: 24, borderRadius: "50%",
-                background: palette.maroon, color: "#fff",
-                display: "inline-flex", alignItems: "center", justifyContent: "center",
-                fontSize: 10, fontWeight: 700,
-              }}>{initials(user.name)}</span>
-              {user.name.split(" ")[0]}
-            </Link>
-          )}
         </nav>
-
-        <button style={styles.basketBtn} onClick={() => openCart(true)}>
-          <BasketIcon />
-          {basketCount > 0 && (
-            <span style={styles.basketBadge}>{basketCount}</span>
-          )}
-        </button>
-
-        {/* Mobile hamburger */}
-        <button style={styles.hamburger} onClick={() => setMenuOpen((o) => !o)}>
-          <span style={{ ...styles.bar, transform: menuOpen ? "rotate(45deg) translateY(6px)" : "none" }} />
-          <span style={{ ...styles.bar, opacity: menuOpen ? 0 : 1 }} />
-          <span style={{ ...styles.bar, transform: menuOpen ? "rotate(-45deg) translateY(-6px)" : "none" }} />
-        </button>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <button style={styles.basketBtn} onClick={() => openCart(true)}>
+            <BasketIcon />
+            {basketCount > 0 && <span style={styles.basketBadge}>{basketCount}</span>}
+          </button>
+          <button style={styles.hamburger} onClick={() => setMenuOpen(o => !o)}>
+            <span style={{ ...styles.bar, transform: menuOpen ? "rotate(45deg) translateY(6px)" : "none" }} />
+            <span style={{ ...styles.bar, opacity: menuOpen ? 0 : 1 }} />
+            <span style={{ ...styles.bar, transform: menuOpen ? "rotate(-45deg) translateY(-6px)" : "none" }} />
+          </button>
+        </div>
       </header>
 
-      {/* Mobile Menu */}
       {menuOpen && (
         <div style={styles.mobileMenu}>
           {[
             { label: "Catalogue", to: "/catalogue" },
             { label: "À Propos", to: "/about" },
-            ...(!user ? [{ label: "Connexion", to: "/login" }] : [{ label: "Mon Compte", to: "/mon-compte" }]),
+            { label: "Connexion", to: "/login" },
+            { label: "Créer un compte", to: "/register" },
           ].map(({ label, to }) => (
-            <Link key={label} to={to} style={styles.mobileNavLink} onClick={() => setMenuOpen(false)}>
-              {label}
-            </Link>
+            <Link key={label} to={to} style={styles.mobileNavLink} onClick={() => setMenuOpen(false)}>{label}</Link>
           ))}
         </div>
       )}
 
       {/* ── HERO ── */}
       <section style={styles.hero} ref={heroRef}>
-        {/* Decorative arcs */}
-        <svg style={styles.heroArc} viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+        <svg style={styles.heroArc} viewBox="0 0 800 800">
           <circle cx="400" cy="400" r="320" fill="none" stroke={palette.beigeDark} strokeWidth="1" opacity="0.5" />
           <circle cx="400" cy="400" r="260" fill="none" stroke={palette.beigeDark} strokeWidth="1" opacity="0.35" />
           <circle cx="400" cy="400" r="200" fill="none" stroke={palette.beigeDark} strokeWidth="1" opacity="0.2" />
         </svg>
-
-        <div
-          style={{
-            ...styles.heroContent,
-            opacity: heroVisible ? 1 : 0,
-            transform: heroVisible ? "translateY(0)" : "translateY(28px)",
-            transition: "opacity 0.9s cubic-bezier(.22,1,.36,1), transform 0.9s cubic-bezier(.22,1,.36,1)",
-          }}
-        >
+        <div style={{
+          ...styles.heroContent,
+          opacity: heroVisible ? 1 : 0,
+          transform: heroVisible ? "translateY(0)" : "translateY(28px)",
+          transition: "opacity 0.9s cubic-bezier(.22,1,.36,1), transform 0.9s cubic-bezier(.22,1,.36,1)",
+        }}>
           <p style={styles.heroEyebrow}>Collection Printemps · 2026</p>
           <h1 style={styles.heroHeadline}>
             Moins d'encombrement,<br />
@@ -135,31 +119,38 @@ export default function LandingPage() {
             Des objets fabriqués lentement, à la main, conçus pour durer des décennies — pas des saisons.
           </p>
           <div style={styles.heroCta}>
-            <button style={styles.btnPrimary}>
+            <Link to="/catalogue" style={{ ...styles.btnPrimary, textDecoration: "none", display: "inline-block" }}>
               Découvrir la Collection
-            </button>
-            <a href="/about" style={styles.btnGhost}>
-              Notre Histoire →
-            </a>
+            </Link>
+            <Link to="/about" style={styles.btnGhost}>Notre Histoire →</Link>
+          </div>
+          <div style={{ display: "flex", gap: 12, marginTop: 28, flexWrap: "wrap" }}>
+            <Link to="/register" style={{
+              fontSize: 12, color: palette.textMuted, textDecoration: "none",
+              letterSpacing: ".04em", borderBottom: `1px dashed ${palette.beigeDark}`, paddingBottom: 1,
+            }}>
+              Créer un compte
+            </Link>
+            <span style={{ color: palette.beigeDark, fontSize: 12 }}>·</span>
+            <Link to="/login" style={{
+              fontSize: 12, color: palette.textMuted, textDecoration: "none",
+              letterSpacing: ".04em", borderBottom: `1px dashed ${palette.beigeDark}`, paddingBottom: 1,
+            }}>
+              Se connecter
+            </Link>
           </div>
         </div>
 
-        {/* Hero visual */}
-        <div
-          style={{
-            ...styles.heroVisual,
-            opacity: heroVisible ? 1 : 0,
-            transform: heroVisible ? "translateX(0) scale(1)" : "translateX(40px) scale(0.96)",
-            transition: "opacity 1.1s 0.2s cubic-bezier(.22,1,.36,1), transform 1.1s 0.2s cubic-bezier(.22,1,.36,1)",
-          }}
-        >
+        <div style={{
+          ...styles.heroVisual,
+          opacity: heroVisible ? 1 : 0,
+          transform: heroVisible ? "translateX(0) scale(1)" : "translateX(40px) scale(0.96)",
+          transition: "opacity 1.1s 0.2s cubic-bezier(.22,1,.36,1), transform 1.1s 0.2s cubic-bezier(.22,1,.36,1)",
+        }}>
           <div style={styles.heroCard}>
             <div style={styles.heroCardInner}>
-              <img
-                src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&q=80"
-                alt="Veste en Laine"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
+              <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&q=80" alt="Veste en Laine"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               <div style={{ ...styles.heroCardTag, position: "absolute", top: 10, left: 10 }}>Fait Main</div>
             </div>
             <div style={styles.heroCardCaption}>
@@ -167,7 +158,6 @@ export default function LandingPage() {
               <span style={styles.heroCardPrice}>185.000 Ar</span>
             </div>
           </div>
-          {/* Floating accent cards */}
           <div style={styles.floatCard1}>
             <span style={{ fontSize: 11, color: palette.textMuted, letterSpacing: "0.08em", textTransform: "uppercase" }}>Naturel</span>
           </div>
@@ -180,18 +170,51 @@ export default function LandingPage() {
 
       {/* ── TRUST STRIP ── */}
       <div style={styles.trustStrip}>
-        {[
-          { label: "Approvisionnement durable" },
-          { label: "Produits artisanaux" },
-          { label: "Emballage sans plastique" },
-          { label: "Retours sous 30 jours" },
-        ].map(({ label }) => (
+        {["Approvisionnement durable", "Produits artisanaux", "Emballage sans plastique", "Retours sous 30 jours"].map(label => (
           <div key={label} style={styles.trustItem}>
             <span style={styles.trustLabel}>{label}</span>
           </div>
         ))}
       </div>
 
+      {/* ── WHY JOIN ── */}
+      <section style={{ padding: "72px 6%", background: palette.white }}>
+        <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
+          <p style={{ fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: palette.maroon, marginBottom: 14 }}>
+            Pourquoi créer un compte
+          </p>
+          <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(28px,3.5vw,44px)", fontWeight: 400, marginBottom: 48, color: palette.text }}>
+            Une expérience <em style={{ fontStyle: "italic", color: palette.maroon }}>sur-mesure</em>
+          </h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: 28 }}>
+            {[
+              { icon: "❤️", title: "Favoris", desc: "Sauvegardez vos coups de cœur et retrouvez-les en un clic." },
+              { icon: "🛒", title: "Panier persistant", desc: "Votre panier vous attend à chaque reconnexion." },
+              { icon: "📦", title: "Suivi de commandes", desc: "Consultez l'état de vos commandes depuis votre profil." },
+              { icon: "🎁", title: "Offres exclusives", desc: "Accédez à des réductions réservées aux membres." },
+            ].map(({ icon, title, desc }) => (
+              <div key={title} style={{
+                background: palette.beigeLight,
+                borderRadius: 14, padding: "28px 22px",
+                border: `1px solid ${palette.beige}`,
+                textAlign: "left",
+              }}>
+                <div style={{ fontSize: 26, marginBottom: 14 }}>{icon}</div>
+                <p style={{ fontSize: 14, fontWeight: 600, color: palette.text, marginBottom: 8 }}>{title}</p>
+                <p style={{ fontSize: 13, color: palette.textMuted, lineHeight: 1.6 }}>{desc}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 40, display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
+            <Link to="/register" style={{ ...styles.btnPrimary, textDecoration: "none", display: "inline-block" }}>
+              Créer un compte gratuit
+            </Link>
+            <Link to="/login" style={{ ...styles.btnGhost, display: "inline-block" }}>
+              Déjà membre ? Se connecter →
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* ── EDITORIAL STRIP ── */}
       <section style={styles.editorial}>
@@ -206,30 +229,21 @@ export default function LandingPage() {
       {/* ── NEWSLETTER ── */}
       <section style={styles.newsletter}>
         <h3 style={styles.newsletterTitle}>Restez informé</h3>
-        <p style={styles.newsletterSub}>
-          Nouvelles arrivées, histoires des artisans et réductions occasionnelles.
-        </p>
+        <p style={styles.newsletterSub}>Nouvelles arrivées, histoires des artisans et réductions occasionnelles.</p>
         <div style={styles.newsletterForm}>
-          <input
-            type="email"
-            placeholder="votre@email.com"
-            style={styles.input}
-          />
+          <input type="email" placeholder="votre@email.com" style={styles.input} />
           <button style={styles.btnPrimary}>S'abonner</button>
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
       <footer style={styles.footer}>
         <div style={styles.footerTop}>
           <div>
-            <span style={styles.logo}>
-              <span style={styles.logoText}>ETHKL</span>
-            </span>
+            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 600, letterSpacing: "0.08em", color: "rgba(255,255,255,.85)" }}>ETHKL</span>
             <p style={styles.footerTagline}>Des objets qui méritent d'être gardés.</p>
           </div>
           <div style={styles.footerLinks}>
-            {["Boutique", "À Propos", "Durabilité", "Contact", "FAQ"].map((l) => (
+            {["Boutique", "À Propos", "Durabilité", "Contact", "FAQ"].map(l => (
               <a key={l} href="#" style={styles.footerLink}>{l}</a>
             ))}
           </div>
@@ -239,26 +253,6 @@ export default function LandingPage() {
           <span>Fait avec intention.</span>
         </div>
       </footer>
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap');
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: ${palette.white}; }
-        
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card-hover {
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card-hover:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 12px 40px rgba(107,30,42,0.1);
-        }
-      `}</style>
     </div>
   );
 }

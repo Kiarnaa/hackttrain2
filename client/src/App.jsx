@@ -15,6 +15,7 @@ import About from "./pages/About";
 import ProductsPage from "./pages/ProductsPage";
 import MonCompte from "./pages/MonCompte";
 import CheckoutPage from "./pages/CheckoutPage";
+import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
       <Routes>
       {/* These routes use their own LandingPage-style header — no Navbar */}
       <Route path="/" element={<LandingPage />} />
+      <Route path="/home" element={<HomePage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/about" element={<About />} />
