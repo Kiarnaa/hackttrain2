@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "../api/axios";
 
+async function uploadImage(file) {
+  const fd = new FormData();
+  fd.append("image", file);
+  const res = await axios.post("/upload", fd, { headers: { "Content-Type": "multipart/form-data" } });
+  return res.data.url;
+}
+
 const palette = {
   white: "#FAFAF8",
   beige: "#E8E0D0",
@@ -16,6 +23,9 @@ const palette = {
 export default function AdminPage() {
   console.log("AdminPage component rendering");
 
+  const [visible, setVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewHover, setPreviewHover] = useState("");
   const [products, setProducts] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -33,7 +43,9 @@ export default function AdminPage() {
 
   useEffect(() => {
     console.log("AdminPage useEffect running");
+    const t = setTimeout(() => setVisible(true), 60);
     fetchProducts();
+    return () => clearTimeout(t);
   }, []);
 
   const fetchProducts = async () => {
@@ -98,7 +110,21 @@ export default function AdminPage() {
       delivery: product.delivery || "",
       published: product.published !== false,
     });
+    setPreviewImage(product.image_url || "");
+    setPreviewHover(product.hover_image || "");
     setShowModal(true);
+  };
+
+  const handleImageChange = async (e, field, setPreview) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setPreview(URL.createObjectURL(file));
+    try {
+      const url = await uploadImage(file);
+      setFormData(prev => ({ ...prev, [field]: url }));
+    } catch {
+      console.error("Upload failed");
+    }
   };
 
   const handleDelete = async (id) => {
@@ -136,6 +162,8 @@ export default function AdminPage() {
       delivery: "",
       published: true,
     });
+    setPreviewImage("");
+    setPreviewHover("");
   };
 
   const openAddModal = () => {
@@ -149,8 +177,14 @@ export default function AdminPage() {
     <>
       {console.log("AdminPage JSX rendering")}
       <div style={styles.root}>
-        <h1>Test: Admin Page Loading...</h1>
-      <header style={styles.header}>
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap');
+          @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+          @keyframes headerSlide { from { opacity:0; transform:translateY(-100%); } to { opacity:1; transform:translateY(0); } }
+          @keyframes modalIn { from { opacity:0; transform:scale(0.92) translateY(24px); } to { opacity:1; transform:scale(1) translateY(0); } }
+          @keyframes overlayIn { from { opacity:0; } to { opacity:1; } }
+        `}</style>
+      <header style={{ ...styles.header, animation: "headerSlide 0.5s cubic-bezier(.22,1,.36,1) both" }}>
         <a href="#" style={styles.logo}>
           <span style={styles.logoText}>ETHKL Admin</span>
         </a>
@@ -162,7 +196,12 @@ export default function AdminPage() {
       </header>
 
       {/* ── MAIN CONTENT ── */}
-      <main style={styles.main}>
+      <main style={{
+        ...styles.main,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(24px)",
+        transition: "opacity 0.8s cubic-bezier(.22,1,.36,1), transform 0.8s cubic-bezier(.22,1,.36,1)",
+      }}>
         <h1 style={styles.title}>Gestion des Produits</h1>
         <div style={styles.tableContainer}>
           <table style={styles.table}>
@@ -175,13 +214,16 @@ export default function AdminPage() {
                 <th style={styles.th}>Couleur</th>
                 <th style={styles.th}>Image Hover</th>
                 <th style={styles.th}>Livraison</th>
-                <th style={styles.th}>Publié</th>
                 <th style={styles.th}>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
-                <tr key={product.id_products} style={styles.tr}>
+              {products.map((product, i) => (
+                <tr key={product.id_products} style={{
+                  ...styles.tr,
+                  animation: "fadeUp 0.5s ease both",
+                  animationDelay: `${Math.min(i * 0.06, 0.4)}s`,
+                }}>
                   <td style={styles.td}>{product.id_products}</td>
                   <td style={styles.td}>{product.name}</td>
                   <td style={styles.td}>{product.price} Ar</td>
@@ -197,18 +239,16 @@ export default function AdminPage() {
                     )}
                   </td>
                   <td style={styles.td}>{product.delivery}</td>
-                  <td style={styles.td}>
+                  <td style={{ ...styles.td, display: "flex", gap: 8, alignItems: "center" }}>
                     <button
                       style={{
                         ...styles.btnSmall,
-                        background: product.published ? palette.maroon : palette.textMuted,
+                        background: product.published ? palette.maroon : palette.maroonDark,
                       }}
                       onClick={() => handlePublishToggle(product)}
                     >
                       {product.published ? "Publié" : "Non publié"}
                     </button>
-                  </td>
-                  <td style={styles.td}>
                     <button
                       style={{ ...styles.btnSmall, background: palette.maroonLight }}
                       onClick={() => handleEdit(product)}
@@ -233,8 +273,8 @@ export default function AdminPage() {
       {showModal && (
         <>
           {console.log("Modal should be visible")}
-          <div style={styles.modalOverlay}>
-          <div style={styles.modalContent}>
+          <div style={{ ...styles.modalOverlay, animation: "overlayIn 0.25s ease both" }}>
+          <div style={{ ...styles.modalContent, animation: "modalIn 0.35s cubic-bezier(.22,1,.36,1) both" }}>
             <button
               style={styles.modalClose}
               onClick={() => setShowModal(false)}
@@ -281,15 +321,15 @@ export default function AdminPage() {
                 />
               </div>
               <div style={styles.formGroup}>
-                <label style={styles.label}>Image URL</label>
-                <input
-                  type="text"
-                  value={formData.image_url}
-                  onChange={(e) =>
-                    setFormData({ ...formData, image_url: e.target.value })
+                <label style={styles.label}>Image principale</label>
+                <label style={styles.fileLabel}>
+                  {previewImage
+                    ? <img src={previewImage} alt="preview" style={styles.filePreview} />
+                    : <span style={styles.filePlaceholder}>📁 Cliquer pour choisir une image</span>
                   }
-                  style={styles.input}
-                />
+                  <input type="file" accept="image/*" style={{ display: "none" }}
+                    onChange={e => handleImageChange(e, "image_url", setPreviewImage)} />
+                </label>
               </div>
               <div style={styles.formGroup}>
                 <label style={styles.label}>Taille/Pointure</label>
@@ -315,14 +355,14 @@ export default function AdminPage() {
               </div>
               <div style={styles.formGroup}>
                 <label style={styles.label}>Image Hover</label>
-                <input
-                  type="text"
-                  value={formData.hover_image}
-                  onChange={(e) =>
-                    setFormData({ ...formData, hover_image: e.target.value })
+                <label style={styles.fileLabel}>
+                  {previewHover
+                    ? <img src={previewHover} alt="preview hover" style={styles.filePreview} />
+                    : <span style={styles.filePlaceholder}>📁 Cliquer pour choisir une image</span>
                   }
-                  style={styles.input}
-                />
+                  <input type="file" accept="image/*" style={{ display: "none" }}
+                    onChange={e => handleImageChange(e, "hover_image", setPreviewHover)} />
+                </label>
               </div>
               <div style={styles.formGroup}>
                 <label style={styles.label}>Livraison</label>
@@ -439,8 +479,9 @@ const styles = {
     fontSize: 14,
   },
   thumbnail: {
-    width: 40,
-    height: 40,
+    width: 100,
+    height: 100,
+    margin: "4px 8px",
     objectFit: "cover",
     borderRadius: 4,
   },
@@ -541,6 +582,29 @@ const styles = {
     color: palette.text,
     minHeight: 80,
     resize: "vertical",
+  },
+  fileLabel: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    border: `2px dashed ${palette.beigeDark}`,
+    borderRadius: 8,
+    minHeight: 120,
+    cursor: "pointer",
+    overflow: "hidden",
+    background: palette.beigeLight,
+    transition: "border-color 0.2s",
+  },
+  filePreview: {
+    width: "100%",
+    height: 160,
+    objectFit: "cover",
+  },
+  filePlaceholder: {
+    fontSize: 13,
+    color: palette.textMuted,
+    padding: 20,
+    textAlign: "center",
   },
   btnPrimary: {
     background: palette.maroon,

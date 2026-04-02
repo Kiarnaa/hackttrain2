@@ -3,14 +3,18 @@ const twilio = require('twilio');
 const db = require('../config/db');
 
 // Initialize SendGrid
-if (process.env.SENDGRID_API_KEY) {
+if (process.env.SENDGRID_API_KEY && process.env.SENDGRID_API_KEY.startsWith('SG')) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+} else if (process.env.SENDGRID_API_KEY) {
+  console.warn('⚠️  SENDGRID_API_KEY does not appear to be valid (should start with "SG")');
 }
 
 // Initialize Twilio
 let twilioClient = null;
-if (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) {
+if (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_ACCOUNT_SID.startsWith('AC')) {
   twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+} else if (process.env.TWILIO_ACCOUNT_SID || process.env.TWILIO_AUTH_TOKEN) {
+  console.warn('⚠️  TWILIO credentials do not appear to be valid (ACCOUNT_SID should start with "AC")');
 }
 
 /**

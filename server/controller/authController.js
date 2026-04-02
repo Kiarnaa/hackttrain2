@@ -20,8 +20,9 @@ const signToken = (user) => {
 };
 
 const register = async (req, res, next) => {
+  const { name, email, password, age } = req.body;
+  
   try {
-    const { name, email, password, age } = req.body;
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'name, email et password sont requis' });
     }
@@ -63,8 +64,9 @@ const register = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
+  const { email, password } = req.body;
+  
   try {
-    const { email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({ message: 'Email et password sont requis' });
     }
