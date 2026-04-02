@@ -62,7 +62,7 @@ export default function LandingPage() {
               {label}
             </Link>
           ))}
-          {user && (
+          {user && user.name && (
             <Link to="/mon-compte" style={{
               ...styles.navLink,
               display: "flex", alignItems: "center", gap: 6,
