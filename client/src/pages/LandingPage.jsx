@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 
 
 const palette = {
@@ -15,8 +17,13 @@ const palette = {
 };
 
 
+function initials(name = "") {
+  return name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
+}
+
 export default function LandingPage() {
-  const [basketCount, setBasketCount] = useState(0);
+  const { user } = useAuth();
+  const { count: basketCount, setIsOpen: openCart } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showStory, setShowStory] = useState(false);
   const [heroVisible, setHeroVisible] = useState(false);
@@ -47,17 +54,32 @@ export default function LandingPage() {
 
         <nav style={styles.nav}>
           {[
-            { label: "Catalogue", to: "/" },
+            { label: "Catalogue", to: "/catalogue" },
             { label: "À Propos", to: "/about" },
-            { label: "Connexion", to: "/login" },
+            ...(!user ? [{ label: "Connexion", to: "/login" }] : []),
           ].map(({ label, to }) => (
             <Link key={label} to={to} style={styles.navLink}>
               {label}
             </Link>
           ))}
+          {user && (
+            <Link to="/mon-compte" style={{
+              ...styles.navLink,
+              display: "flex", alignItems: "center", gap: 6,
+              textDecoration: "none",
+            }}>
+              <span style={{
+                width: 24, height: 24, borderRadius: "50%",
+                background: palette.maroon, color: "#fff",
+                display: "inline-flex", alignItems: "center", justifyContent: "center",
+                fontSize: 10, fontWeight: 700,
+              }}>{initials(user.name)}</span>
+              {user.name.split(" ")[0]}
+            </Link>
+          )}
         </nav>
 
-        <button style={styles.basketBtn} onClick={() => setBasketCount((c) => c + 1)}>
+        <button style={styles.basketBtn} onClick={() => openCart(true)}>
           <BasketIcon />
           {basketCount > 0 && (
             <span style={styles.basketBadge}>{basketCount}</span>
@@ -76,9 +98,9 @@ export default function LandingPage() {
       {menuOpen && (
         <div style={styles.mobileMenu}>
           {[
-            { label: "Catalogue", to: "/" },
+            { label: "Catalogue", to: "/catalogue" },
             { label: "À Propos", to: "/about" },
-            { label: "Connexion", to: "/login" },
+            ...(!user ? [{ label: "Connexion", to: "/login" }] : [{ label: "Mon Compte", to: "/mon-compte" }]),
           ].map(({ label, to }) => (
             <Link key={label} to={to} style={styles.mobileNavLink} onClick={() => setMenuOpen(false)}>
               {label}
