@@ -41,7 +41,7 @@ export default function LandingPage() {
         <span style={styles.bannerDot} />
         <span style={styles.bannerText}>
           Livraison gratuite pour les commandes supérieures à{" "}
-          <strong style={{ fontWeight: 700 }}>50.000 MGA</strong> — sans code promo
+          <strong style={{ fontWeight: 700 }}>200.000 MGA</strong> — sans code promo
         </span>
         <span style={styles.bannerDot} />
       </div>
