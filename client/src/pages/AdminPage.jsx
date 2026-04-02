@@ -203,9 +203,7 @@ export default function AdminPage() {
 
       {/* ── MODAL ── */}
       {showModal && (
-        <>
-          {console.log("Modal should be visible")}
-          <div style={styles.modalOverlay}>
+        <div style={styles.modalOverlay}>
           <div style={styles.modalContent}>
             <button
               style={styles.modalClose}

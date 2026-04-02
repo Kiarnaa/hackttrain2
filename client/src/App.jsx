@@ -11,6 +11,9 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import AdminPage from "./pages/AdminPage";
+import About from "./pages/About";
+import ProductsPage from "./pages/ProductsPage";
+import MonCompte from "./pages/MonCompte";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -31,9 +34,10 @@ function App() {
       <Routes>
       {/* These routes use their own LandingPage-style header — no Navbar */}
       <Route path="/" element={<LandingPage />} />
-      <Route path="/admin" element={<AdminPage />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/about" element={<About />} />
+      <Route path="/admin" element={<AdminPage />} />
       <Route path="/catalogue" element={<ProductsPage />} />
       <Route path="/mon-compte" element={<MonCompte />} />
 
@@ -60,14 +64,6 @@ function App() {
                     <ProtectedRoute>
                       <Profile />
                     </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/admin"
-                  element={
-                    <AdminRoute>
-                      <AdminPage />
-                    </AdminRoute>
                   }
                 />
                 <Route path="*" element={<Navigate to="/" replace />} />
