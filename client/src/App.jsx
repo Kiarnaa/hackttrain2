@@ -14,6 +14,7 @@ import AdminPage from "./pages/AdminPage";
 import About from "./pages/About";
 import ProductsPage from "./pages/ProductsPage";
 import MonCompte from "./pages/MonCompte";
+import CheckoutPage from "./pages/CheckoutPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/catalogue" element={<ProductsPage />} />
       <Route path="/mon-compte" element={<MonCompte />} />
+      <Route path="/checkout" element={<CheckoutPage />} />
 
       {/* All other routes share the Navbar layout */}
       <Route
