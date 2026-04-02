@@ -3,16 +3,21 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const pool = new Pool({
+const poolConfig = {
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT, 10) || 5432,
   database: process.env.DB_NAME || 'hackttrain2',
   user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || undefined,
   max: 10,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
-});
+};
+
+if (process.env.DB_PASSWORD) {
+  poolConfig.password = process.env.DB_PASSWORD;
+}
+
+const pool = new Pool(poolConfig);
 
 pool.on('error', (err) => {
   console.error('Unexpected error on idle client', err);
