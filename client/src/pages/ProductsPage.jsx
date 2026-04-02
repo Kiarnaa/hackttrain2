@@ -15,119 +15,6 @@ const p = {
   mutedLight: "#A49A90",
 };
 
-// ── PRODUCT DATA ───────────────────────────────────────────────────────────
-const ALL_PRODUCTS = [
-  // CLOTHING
-  {
-    id: 1, category: "Vêtements", sub: "Hauts",
-    name: "Chemise en Lin Craie", price: 88, oldPrice: null, tag: "Nouveau",
-    sizes: ["XS","S","M","L","XL"],
-    colors: ["#EAE0D0","#2C2420","#6B1E2A"],
-    img:      "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=600&q=80",
-    imgHover: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&q=80",
-    desc: "Coupe décontractée, 100% lin naturel.",
-  },
-  {
-    id: 2, category: "Vêtements", sub: "Hauts",
-    name: "Pull Mérinos", price: 112, oldPrice: 148, tag: "Soldes",
-    sizes: ["S","M","L"],
-    colors: ["#C8B9A8","#1A1410","#4A3728"],
-    img:      "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&q=80",
-    imgHover: "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=600&q=80",
-    desc: "Mérinos éthique, poids intermédiaire.",
-  },
-  {
-    id: 3, category: "Vêtements", sub: "Manteaux",
-    name: "Sur-chemise en Toile", price: 155, oldPrice: null, tag: "Best-seller",
-    sizes: ["S","M","L","XL"],
-    colors: ["#8C7B6B","#2C2420"],
-    img:      "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80",
-    imgHover: "https://images.unsplash.com/photo-1548126032-079a0fb0099d?w=600&q=80",
-    desc: "Toile de coton lavée, deux poches poitrine.",
-  },
-  {
-    id: 4, category: "Vêtements", sub: "Bas",
-    name: "Pantalon Large", price: 95, oldPrice: null, tag: null,
-    sizes: ["XS","S","M","L","XL"],
-    colors: ["#E8E0D0","#2C2420","#4A5C4A"],
-    img:      "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&q=80",
-    imgHover: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&q=80",
-    desc: "Tissu crêpe fluide, taille élastique.",
-  },
-  {
-    id: 5, category: "Vêtements", sub: "Robes",
-    name: "Robe Midi Satinée", price: 128, oldPrice: null, tag: "Nouveau",
-    sizes: ["XS","S","M","L"],
-    colors: ["#D4B896","#2C2420","#8B7355"],
-    img:      "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&q=80",
-    imgHover: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&q=80",
-    desc: "Viscose satinée, bretelles réglables.",
-  },
-  {
-    id: 6, category: "Vêtements", sub: "Manteaux",
-    name: "Manteau en Laine", price: 295, oldPrice: 380, tag: "Soldes",
-    sizes: ["S","M","L","XL"],
-    colors: ["#C8B9A8","#1A1410"],
-    img:      "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&q=80",
-    imgHover: "https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?w=600&q=80",
-    desc: "60% mélange laine, épaules tombantes.",
-  },
-  // SHOES
-  {
-    id: 7, category: "Chaussures", sub: "Ballerines",
-    name: "Mule en Cuir", price: 145, oldPrice: null, tag: "Best-seller",
-    sizes: ["36","37","38","39","40","41"],
-    colors: ["#C8A882","#2C2420","#6B1E2A"],
-    img:      "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&q=80",
-    imgHover: "https://images.unsplash.com/photo-1515347619252-60a4bf4fff4f?w=600&q=80",
-    desc: "Cuir pleine fleur tanné végétal.",
-  },
-  {
-    id: 8, category: "Chaussures", sub: "Bottes",
-    name: "Chelsea Boot", price: 220, oldPrice: null, tag: "Nouveau",
-    sizes: ["36","37","38","39","40","41","42"],
-    colors: ["#2C2420","#8C7B6B"],
-    img:      "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=600&q=80",
-    imgHover: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80",
-    desc: "Élastiques glissants, semelle cuir.",
-  },
-  {
-    id: 9, category: "Chaussures", sub: "Baskets",
-    name: "Sneaker Court", price: 168, oldPrice: 210, tag: "Soldes",
-    sizes: ["36","37","38","39","40","41","42","43"],
-    colors: ["#FAFAF8","#2C2420"],
-    img:      "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=600&q=80",
-    imgHover: "https://images.unsplash.com/photo-1579338559194-a162d19bf842?w=600&q=80",
-    desc: "Silhouette basse, semelle caoutchouc naturel.",
-  },
-  {
-    id: 10, category: "Chaussures", sub: "Sandales",
-    name: "Sandale à Lanières", price: 118, oldPrice: null, tag: null,
-    sizes: ["36","37","38","39","40","41"],
-    colors: ["#C8A882","#2C2420"],
-    img:      "https://images.unsplash.com/photo-1603487742131-4160ec999306?w=600&q=80",
-    imgHover: "https://images.unsplash.com/photo-1560343090-f0409e92791a?w=600&q=80",
-    desc: "Bride cheville réglable, semelle liège.",
-  },
-  {
-    id: 11, category: "Chaussures", sub: "Bottes",
-    name: "Bottine", price: 195, oldPrice: null, tag: null,
-    sizes: ["36","37","38","39","40","41"],
-    colors: ["#6B5040","#2C2420"],
-    img:      "https://images.unsplash.com/photo-1512374382149-233c42b6a83b?w=600&q=80",
-    imgHover: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=600&q=80",
-    desc: "Talon carré, zip latéral, cuir souple.",
-  },
-  {
-    id: 12, category: "Chaussures", sub: "Ballerines",
-    name: "Ballerine", price: 98, oldPrice: null, tag: "Best-seller",
-    sizes: ["35","36","37","38","39","40"],
-    colors: ["#C8A882","#2C2420","#6B1E2A"],
-    img:      "https://images.unsplash.com/photo-1574180566232-aaad1b5b8450?w=600&q=80",
-    imgHover: "https://images.unsplash.com/photo-1515347619252-60a4bf4fff4f?w=600&q=80",
-    desc: "Cuir nappa doux, bout amande.",
-  },
-];
 
 const CATEGORIES     = ["Tout","Vêtements","Chaussures"];
 const CLOTHING_SUBS  = ["Tout","Hauts","Bas","Robes","Manteaux"];
@@ -520,15 +407,51 @@ export default function ProductsPage() {
   const [search,    setSearch]    = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [visible,   setVisible]   = useState(false);
+  const [products,  setProducts]  = useState([]);
+  const [loading,   setLoading]   = useState(true);
 
   useEffect(() => { const t = setTimeout(() => setVisible(true), 60); return () => clearTimeout(t); }, []);
   useEffect(() => { setSubFilter("Tout"); }, [category]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/produits');
+        if (!response.ok) throw new Error('Failed to fetch products');
+        const data = await response.json();
+        const produits = data.produits || [];
+
+        const formattedProducts = produits.map(p => ({
+          id: p.id_products,
+          category: p.category || "Vêtements",
+          sub: p.subcategory || "Hauts",
+          name: p.name,
+          price: Math.round(p.price / 1000),
+          oldPrice: p.oldPrice || null,
+          tag: p.tag || null,
+          sizes: p.sizes || [],
+          colors: p.colors || [],
+          img: p.image_url,
+          imgHover: p.hover_image || p.image_url,
+          desc: p.description
+        }));
+
+        setProducts(formattedProducts);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const subs = category === "Vêtements" ? CLOTHING_SUBS
              : category === "Chaussures" ? SHOES_SUBS
              : [];
 
-  const filtered = ALL_PRODUCTS
+  const filtered = products
     .filter(pr => {
       if (category !== "Tout" && pr.category !== category) return false;
       if (subFilter !== "Tout" && pr.sub !== subFilter)    return false;
