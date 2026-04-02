@@ -56,6 +56,7 @@ export default function LandingPage() {
           {[
             { label: "Catalogue", to: "/catalogue" },
             { label: "À Propos", to: "/about" },
+            { label: "profil", to: "/mon-compte" },
             ...(!user ? [{ label: "Connexion", to: "/login" }] : []),
           ].map(({ label, to }) => (
             <Link key={label} to={to} style={styles.navLink}>
