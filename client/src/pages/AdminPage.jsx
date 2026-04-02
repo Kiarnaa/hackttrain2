@@ -333,6 +333,7 @@ export default function AdminPage() {
       </div>
     </>
   );
+}  
 
 /* ── STYLES ── */
 const styles = {
