@@ -532,4 +532,3 @@ const styles = {
     transition: "background 0.2s ease",
   },
 }
-}
