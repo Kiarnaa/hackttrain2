@@ -70,7 +70,7 @@ export default function LandingHeader() {
         </nav>
 
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          {user && (
+          {user && user.name && (
             <Link to="/mon-compte" style={styles.avatarBtn} title={user.name}>
               <span style={styles.avatarCircle}>{initials(user.name)}</span>
               <span style={{ fontSize: 13, color: palette.textMuted, letterSpacing: ".04em" }}>
