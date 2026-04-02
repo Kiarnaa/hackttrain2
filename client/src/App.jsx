@@ -10,10 +10,11 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
-import ProtectedRoute from "./components/ProtectedRoute";
+import AdminPage from "./pages/AdminPage";
 import About from "./pages/About";
 import ProductsPage from "./pages/ProductsPage";
 import MonCompte from "./pages/MonCompte";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const { loading } = useAuth();
@@ -36,6 +37,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/about" element={<About />} />
+      <Route path="/admin" element={<AdminPage />} />
       <Route path="/catalogue" element={<ProductsPage />} />
       <Route path="/mon-compte" element={<MonCompte />} />
 

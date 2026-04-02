@@ -40,16 +40,7 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 9000;
 
-initDb()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error("Failed to initialize database:", err.message);
-    console.warn("⚠️  Continuing without database - using mock mode only");
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT} (without database)`);
-    });
-  });
+// Démarrer le serveur sans initialisation de DB (mode mock)
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT} (mock mode)`);
+});
